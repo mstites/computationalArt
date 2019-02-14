@@ -1,7 +1,7 @@
 """
-YOUR HEADER COMMENT HERE
+2/13/2019
 
-@author: YOUR NAME HERE
+@author: Griffith Stites
 """
 
 import random
@@ -77,15 +77,22 @@ def remap_interval(val,
         The value remapped from the input to the output interval
 
     Examples:
-        >>> remap_interval(0.5, 0, 1, 0, 10)
+        >>> remap_interval(0.5, 0, 1, 0, 10) # 0.5 is half way between 0 and 1, 5 is half way between 0 and 10
         5.0
-        >>> remap_interval(5, 4, 6, 0, 2)
+        >>> remap_interval(5, 4, 6, 0, 2) # 5 is half way in between 4 and 6, 1.0 is between 0 and 2
         1.0
         >>> remap_interval(5, 4, 6, 1, 2)
         1.5
     """
-    # TODO: implement this
-    pass
+    # ratio from the val to the range of the input interval == the ratio from the output val to the range of the output interval
+    # could just subtract the input_interval_start from input_interval_start and end, and val
+    input_interval = input_interval_end - input_interval_start # distance between the two input values
+    step = val - input_interval_start # step from the min input value to the val
+    step_ratio = step/float(input_interval) # ratio from the step to the interval between inputs. IE 1 is half way to 2. Output .5
+    print("step_ratio = ", step_ratio)
+
+    output_interval = output_interval_end - output_interval_start
+    return (step_ratio * output_interval) + output_interval_start
 
 
 def color_map(val):
@@ -148,8 +155,8 @@ def generate_art(filename, x_size=350, y_size=350):
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
     pixels = im.load()
-    for i in range(x_size):
-        for j in range(y_size):
+    for i in range(x_size): # loops over all the x dimensions (rows)
+        for j in range(y_size): # loops over all the y pixels (columns) in that row
             x = remap_interval(i, 0, x_size, -1, 1)
             y = remap_interval(j, 0, y_size, -1, 1)
             pixels[i, j] = (
@@ -163,7 +170,8 @@ def generate_art(filename, x_size=350, y_size=350):
 
 if __name__ == '__main__':
     import doctest
-    doctest.testmod()
+    # doctest.testmod()
+    doctest.run_docstring_examples(remap_interval, globals())
 
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
@@ -172,4 +180,4 @@ if __name__ == '__main__':
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
-    test_image("noise.png")
+    # test_image("noise.png")
