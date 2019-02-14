@@ -7,6 +7,33 @@
 import random
 from PIL import Image
 
+def get_function(start = 1, end = 6):
+    """Get a random function.
+
+    Uses a dictionary as a switch to chose a random function to return.
+
+    >>> get_function(1, 1)
+    'prod'
+    >>> get_function(2, 2)
+    'avg'
+    >>> get_function(3, 3)
+    'cos_pi'
+    >>> get_function(4, 4)
+    'sin_pi'
+    >>> get_function(5, 5)
+    'x'
+    >>> get_function(6, 6)
+    'y'
+    """
+    # NEED TO ADD TWO MORE BUILDING BLOCKS THAT ARE BETWEEN [-1, 1] OUTPUT WITH [-1, 1] INPUT
+    return {
+        1:'prod',
+        2:'avg',
+        3:'cos_pi',
+        4:'sin_pi',
+        5:'x',
+        6:'y',
+    }[random.randint(start, end)] # choses a random case from start to end
 
 def build_random_function(min_depth, max_depth):
     """Build a random function.
@@ -23,10 +50,41 @@ def build_random_function(min_depth, max_depth):
         The randomly generated function represented as a nested list.
         (See the assignment writ-eup for details on the representation of
         these functions)
-    """
-    # TODO: implement this
-    pass
 
+    >>> build_random_function(1, 1)
+    >>> build_random_function(7, 9)
+    """
+    list = []
+    # once we hit the limit, we should search finilize
+    # IE if our length is at 8 and we get cos_pi. We need either x or y
+    # IE if our length is at 7 and we get avg or prod. We need two of x or y. or x and y
+    if(min_depth == 0): # if we do not need to add any others to finish
+        return list
+    elif(max_depth < 2): # if we cannot add a min 2 depth function due to space: prod or avg
+        pass
+        # new_func = get_function(random.randint(3, 6))
+    elif(max_depth == 0): # have reached max
+        return list
+
+    # CANNOT CHOOSE X or Y FOR FIRST ONE ONE LEN LONGER THAN 1
+    new_func = get_function(random.randint(1, 4)) # get any new function except x or y
+    # CANNOT ADD NEW_FUNC TO LIST UNTIL IT HAS X OR Y
+    list.append(new_func) # add the new function to the list
+    print("new_func = ", new_func)
+    print("list = ", list)
+    if(new_func == "x" or new_func == "y"):
+        list += build_random_function(min_depth - 1, max_depth - 1)
+    return list
+    # return build_random_function(min_depth - 1, max_depth - 1)
+
+    # if (new_func == "prod" or new_func == "avg"):
+    #     return build_random_function(min_depth - 1, max_depth - 1)
+    # else:
+    #     list.append(new_func)
+    print(list)
+
+        # add two new functions from get_function, but ignore prod and avg
+    # build_random_function(min_depth, max_depth)
 
 def evaluate_random_function(f, x, y):
     """Evaluate the random function f with inputs x,y.
@@ -46,11 +104,19 @@ def evaluate_random_function(f, x, y):
         -0.5
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
+    >>> evaluate_random_function()
     """
     if (f[0] == "x"):
         return x
     else:
         return y
+
+    # prod(a, b) = ab
+    # avg(a, b) = 0.5*(a + b)
+    # cos_pi(a) = cos(pi * a)
+    # sin_pi(a) = sin(pi * a)
+    # x(a, b) = a
+    # y(a, b) = b
 
 
 def remap_interval(val,
@@ -146,9 +212,9 @@ def generate_art(filename, x_size=350, y_size=350):
         x_size, y_size: optional args to set image dimensions (default: 350)
     """
     # Functions for red, green, and blue channels - where the magic happens!
-    red_function = ["x"]
-    green_function = ["y"]
-    blue_function = ["x"]
+    red_function = build_random_function(7, 9)
+    green_function = build_random_function(7, 9)
+    blue_function = build_random_function(7, 9)
 
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
@@ -169,12 +235,12 @@ def generate_art(filename, x_size=350, y_size=350):
 if __name__ == '__main__':
     import doctest
     # doctest.testmod()
-    doctest.run_docstring_examples(evaluate_random_function, globals())
-
+    # doctest.run_docstring_examples(get_function, globals())
+    doctest.run_docstring_examples(build_random_function, globals())
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
-    generate_art("myart.png")
+    # generate_art("myart.png")
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
