@@ -84,15 +84,11 @@ def remap_interval(val,
         >>> remap_interval(5, 4, 6, 1, 2)
         1.5
     """
-    # ratio from the val to the range of the input interval == the ratio from the output val to the range of the output interval
-    # could just subtract the input_interval_start from input_interval_start and end, and val
-    input_interval = input_interval_end - input_interval_start # distance between the two input values
-    step = val - input_interval_start # step from the min input value to the val
-    step_ratio = step/float(input_interval) # ratio from the step to the interval between inputs. IE 1 is half way to 2. Output .5
-    print("step_ratio = ", step_ratio)
+    # step_ratio = step from the start of the input interval to val divided by the size of the interval
+    step_ratio = (val-input_interval_start)/float(input_interval_end - input_interval_start)
 
-    output_interval = output_interval_end - output_interval_start
-    return (step_ratio * output_interval) + output_interval_start
+    # the step ratio multiplied by the output interval, then added to the start value for output
+    return (step_ratio * (output_interval_end-output_interval_start)) + output_interval_start
 
 
 def color_map(val):
