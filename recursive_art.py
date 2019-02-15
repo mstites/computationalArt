@@ -52,7 +52,7 @@ def build_random_function(min_depth, max_depth):
         these functions)
 
     >>> build_random_function(1, 3)
-    #>>> build_random_function(3, 3)
+    >>> build_random_function(3, 3)
     >>> build_random_function(7, 9)
     """
     list = []
@@ -63,17 +63,21 @@ def build_random_function(min_depth, max_depth):
         return list
     elif(depth == 2):
         list.append(get_function(3, 4)) # get either sin or cos
-        list.append(build_random_function(depth - 1, depth - 1))
+        list.append(build_random_function(depth - 1, depth - 1)) # go get x or y
     elif(depth >= 3): # must add three depth or larger
         list.append(get_function(1, 4)) # get prod, avg, cos, or sin
         if(list[0] == "prod"):
-            list.append(build_random_function(2, depth))
-            list.append(build_random_function(2, depth))
+            depth_n = random.randint(1, depth - 1) # create a new depth to represent the amount after the function that we have to create
+            # either val1 or val2 must be depth-1, such that prod[val1],[val2] is depth long. The other can be any length
+            list.append(build_random_function(1, depth - 1)) # the first value is a random length
+            list.append(build_random_function(depth - 1, depth - 1)) # the second half is the remaining interval needed
         elif(list[0] == "avg"):
-            list.append(build_random_function(2, depth))
-            list.append(build_random_function(2, depth))
+            # either val1 or val2 must be depth-1, such that avg[val1],[val2] is depth long. The other can be any length
+            list.append(build_random_function(1, depth - 1)) # the first value is a random length up to the interval length
+            list.append(build_random_function(depth - 1, depth - 1)) # the second half is the remaining interval needed
         else: # if sin or cos
-            list.append(build_random_function(1, depth - 1))
+            # must be depth-1 long
+            list.append(build_random_function(depth - 1, depth - 1))
     # else:
     #     list.append(build_random_function(depth - 1, depth - 1))
     # list.append(build_random_function(depth - 1, depth - 1))
