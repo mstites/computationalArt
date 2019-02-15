@@ -51,40 +51,42 @@ def build_random_function(min_depth, max_depth):
         (See the assignment writ-eup for details on the representation of
         these functions)
 
-    >>> build_random_function(1, 1)
+    #>>> build_random_function(1, 1)
+    #>>> build_random_function(2, 2)
+    >>> build_random_function(1, 3)
+    #>>> build_random_function(1, 3)
     >>> build_random_function(7, 9)
     """
     list = []
-    # once we hit the limit, we should search finilize
-    # IE if our length is at 8 and we get cos_pi. We need either x or y
-    # IE if our length is at 7 and we get avg or prod. We need two of x or y. or x and y
-    if(min_depth == 0): # if we do not need to add any others to finish
+    max_depth = random.randint(min_depth, max_depth) # randomize the length between the beginning and end
+    print(max_depth)
+    if(max_depth == 1): # have reached the end and must stop
+        list.append(get_function(5, 6)) # get either x or y
         return list
-    elif(max_depth < 2): # if we cannot add a min 2 depth function due to space: prod or avg
-        pass
-        # new_func = get_function(random.randint(3, 6))
-    elif(max_depth == 0): # have reached max
-        return list
+    elif(max_depth == 2):
+        list.append(get_function(3, 4)) # get either sin or cos
+    elif(max_depth >= 3): # must add three depth or larger
+        new = get_function(1, 4) # get prod, avg, cos, or sin
+        list.append(new)
+        if(new == "prod"):
+            list.append(build_random_function(min_depth = 2, max_depth))
+        elif(new == "avg"):
+            list.append(build_random_function(min_depth = 2, max_depth))
+        else:
+            print("hi")
+    list.append(build_random_function(max_depth - 1, max_depth - 1))
 
-    # CANNOT CHOOSE X or Y FOR FIRST ONE ONE LEN LONGER THAN 1
-    new_func = get_function(random.randint(1, 4)) # get any new function except x or y
-    # CANNOT ADD NEW_FUNC TO LIST UNTIL IT HAS X OR Y
-    list.append(new_func) # add the new function to the list
-    print("new_func = ", new_func)
-    print("list = ", list)
-    if(new_func == "x" or new_func == "y"):
-        list += build_random_function(min_depth - 1, max_depth - 1)
+    # elif(max_depth >= 3 and min_depth >= 3): # can and must add a value of depth 3 or higher
+    #     new = get_function(1, 4) # get prod, avg, cos, or sin
+    #     list.append(new)
+    #     # if(new == "prod"):
+    #     #     list.append(build_random_function(min_depth = 2, max_depth = 2))
+    #     # elif(new == "avg"):
+    #     #     list.append(build_random_function(min_depth = 2, max_depth = 2))
+    #     # else:
+    #     #     pass
+    # list.append(build_random_function(min_depth - 1, max_depth - 1))
     return list
-    # return build_random_function(min_depth - 1, max_depth - 1)
-
-    # if (new_func == "prod" or new_func == "avg"):
-    #     return build_random_function(min_depth - 1, max_depth - 1)
-    # else:
-    #     list.append(new_func)
-    print(list)
-
-        # add two new functions from get_function, but ignore prod and avg
-    # build_random_function(min_depth, max_depth)
 
 def evaluate_random_function(f, x, y):
     """Evaluate the random function f with inputs x,y.
