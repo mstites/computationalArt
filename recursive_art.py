@@ -51,41 +51,32 @@ def build_random_function(min_depth, max_depth):
         (See the assignment writ-eup for details on the representation of
         these functions)
 
-    #>>> build_random_function(1, 1)
-    #>>> build_random_function(2, 2)
     >>> build_random_function(1, 3)
-    #>>> build_random_function(1, 3)
+    #>>> build_random_function(3, 3)
     >>> build_random_function(7, 9)
     """
     list = []
-    max_depth = random.randint(min_depth, max_depth) # randomize the length between the beginning and end
-    print(max_depth)
-    if(max_depth == 1): # have reached the end and must stop
+    depth = random.randint(min_depth, max_depth) # randomize the length between the beginning and end
+    print(depth)
+    if(depth == 1): # have reached the end and must stop
         list.append(get_function(5, 6)) # get either x or y
         return list
-    elif(max_depth == 2):
+    elif(depth == 2):
         list.append(get_function(3, 4)) # get either sin or cos
-    elif(max_depth >= 3): # must add three depth or larger
-        new = get_function(1, 4) # get prod, avg, cos, or sin
-        list.append(new)
-        if(new == "prod"):
-            list.append(build_random_function(min_depth = 2, max_depth))
-        elif(new == "avg"):
-            list.append(build_random_function(min_depth = 2, max_depth))
-        else:
-            print("hi")
-    list.append(build_random_function(max_depth - 1, max_depth - 1))
-
-    # elif(max_depth >= 3 and min_depth >= 3): # can and must add a value of depth 3 or higher
-    #     new = get_function(1, 4) # get prod, avg, cos, or sin
-    #     list.append(new)
-    #     # if(new == "prod"):
-    #     #     list.append(build_random_function(min_depth = 2, max_depth = 2))
-    #     # elif(new == "avg"):
-    #     #     list.append(build_random_function(min_depth = 2, max_depth = 2))
-    #     # else:
-    #     #     pass
-    # list.append(build_random_function(min_depth - 1, max_depth - 1))
+        list.append(build_random_function(depth - 1, depth - 1))
+    elif(depth >= 3): # must add three depth or larger
+        list.append(get_function(1, 4)) # get prod, avg, cos, or sin
+        if(list[0] == "prod"):
+            list.append(build_random_function(2, depth))
+            list.append(build_random_function(2, depth))
+        elif(list[0] == "avg"):
+            list.append(build_random_function(2, depth))
+            list.append(build_random_function(2, depth))
+        else: # if sin or cos
+            list.append(build_random_function(1, depth - 1))
+    # else:
+    #     list.append(build_random_function(depth - 1, depth - 1))
+    # list.append(build_random_function(depth - 1, depth - 1))
     return list
 
 def evaluate_random_function(f, x, y):
@@ -238,7 +229,7 @@ if __name__ == '__main__':
     import doctest
     # doctest.testmod()
     # doctest.run_docstring_examples(get_function, globals())
-    doctest.run_docstring_examples(build_random_function, globals())
+    doctest.run_docstring_examples(build_random_function, globals(), verbose = True)
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
