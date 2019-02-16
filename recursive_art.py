@@ -109,9 +109,9 @@ def evaluate_random_function(f, x, y):
         -0.5
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
-    >>> evaluate_random_function(['sin_pi', ['y']], 0.5, 0.75)
-        0.7071067812
-    >>> evaluate_random_function(['cos_pi', ['cos_pi', ['y']]], 0.75, 0.6)
+        >>> evaluate_random_function(['sin_pi', ['y']], 0.5, 0.75)
+        0.7071067811865476
+        >>> evaluate_random_function(['cos_pi', ['cos_pi', ['y']]], 0.75, 0.6)
         0.5646348864
 
     ['avg', ['cos_pi', ['cos_pi', ['sin_pi', ['x2']]]], ['avg', ['y'], ['sin_pi', ['cos_pi', ['sin_pi', ['sin_pi', ['x2']]]]]]]
@@ -122,31 +122,26 @@ def evaluate_random_function(f, x, y):
     #     return x
     # else:
     #     return y
-    val = 0.0
-    if len(f) == 0: # if all of the values of f have been accounted for
-        return val
-    elif (f[-1] == "x"):
-        return x
-    elif (f[-1] == "y"):
-        print("here")
-        return y
-    elif (f[-1] == "x2"):
-        return x**2
-    elif (f[-1] == "y2"):
-        return y**2
-    elif (f[-1] == "sin_pi"):
-        print("sin_pi")
-        return math.sin(math.pi*x)
-    elif (f[-1] == "cos_pi"):
-        return math.cos(math.pi*x)
+    test = f.pop()
+    if (test == "x" or test == ["x"]):
+        val = x
+    elif (test == "y" or test == ["y"]):
+        val = y
+    elif (test == "x2"):
+        val = x**2
+    elif (test == "y2"):
+        val = y**2
+    elif (test == "sin_pi"):
+        val = math.sin(math.pi*x)
+    elif (test == "cos_pi"):
+        val = math.cos(math.pi*x)
     else: # if all values have not been checked
-        new = f.pop() # removes the last item from f and assigns that value to n
-        print("new = ", new)
-        # new = new.pop()
-        # print(new)
-        # print(f)
-        val = evaluate_random_function(new, val, y) # evaluate the last value
-        print(val)
+        val = x
+    if len(f) <= 0: # if all of the values of f have been accounted for
+        return val
+    else:
+        val = evaluate_random_function(f, val, y) # evaluate the last value
+    return val
     # prod(a, b) = ab
     # avg(a, b) = 0.5*(a + b)
     # cos_pi(a) = cos(pi * a)
