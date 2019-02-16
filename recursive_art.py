@@ -5,6 +5,7 @@
 """
 
 import random
+import math
 from PIL import Image
 
 def get_function(start = 1, end = 6):
@@ -24,8 +25,11 @@ def get_function(start = 1, end = 6):
     'x'
     >>> get_function(6, 6)
     'y'
+    >>> get_function(7, 7)
+    'x2'
+    >>> get_function(8, 8)
+    'y2'
     """
-    # NEED TO ADD TWO MORE BUILDING BLOCKS THAT ARE BETWEEN [-1, 1] OUTPUT WITH [-1, 1] INPUT
     return {
         1:'prod',
         2:'avg',
@@ -33,6 +37,8 @@ def get_function(start = 1, end = 6):
         4:'sin_pi',
         5:'x',
         6:'y',
+        7:'x2',
+        8:'y2',
     }[random.randint(start, end)] # choses a random case from start to end
 
 def build_random_function(min_depth, max_depth):
@@ -56,10 +62,15 @@ def build_random_function(min_depth, max_depth):
     >>> build_random_function(7, 9)
     """
     list = []
-    depth = random.randint(min_depth, max_depth) # randomize the length between the beginning and end
-    print(depth)
+
+    # Implemented this if statement to try to speed up run times instead of randomizing each time
+    if(min_depth != max_depth): # if min_depth and max_depth are not the same
+        depth = random.randint(min_depth, max_depth) # randomize the length between the beginning and end
+    else: # otherwise, depth is the min_depth (which is the same as the max_depth)
+        depth = min_depth
+
     if(depth == 1): # have reached the end and must stop
-        list.append(get_function(5, 6)) # get either x or y
+        list.append(get_function(5, 8)) # get either x, x2, y, or y2
         return list
     elif(depth == 2):
         list.append(get_function(3, 4)) # get either sin or cos
@@ -78,9 +89,6 @@ def build_random_function(min_depth, max_depth):
         else: # if sin or cos
             # must be depth-1 long
             list.append(build_random_function(depth - 1, depth - 1))
-    # else:
-    #     list.append(build_random_function(depth - 1, depth - 1))
-    # list.append(build_random_function(depth - 1, depth - 1))
     return list
 
 def evaluate_random_function(f, x, y):
@@ -101,19 +109,52 @@ def evaluate_random_function(f, x, y):
         -0.5
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
-    >>> evaluate_random_function()
-    """
-    if (f[0] == "x"):
-        return x
-    else:
-        return y
+    >>> evaluate_random_function(['sin_pi', ['y']], 0.5, 0.75)
+        0.7071067812
+    >>> evaluate_random_function(['cos_pi', ['cos_pi', ['y']]], 0.75, 0.6)
+        0.5646348864
 
+    ['avg', ['cos_pi', ['cos_pi', ['sin_pi', ['x2']]]], ['avg', ['y'], ['sin_pi', ['cos_pi', ['sin_pi', ['sin_pi', ['x2']]]]]]]
+    ['avg', ['cos_pi', ['cos_pi', ['x2']]], ['avg', ['avg', ['y2'], ['cos_pi', ['avg', ['x2'], ['cos_pi', ['x']]]]], ['prod', ['cos_pi', ['x']], ['cos_pi', ['prod', ['cos_pi', ['y2']], ['cos_pi', ['x2']]]]]]]
+
+    """
+    # if (f[0] == "x"):
+    #     return x
+    # else:
+    #     return y
+    val = 0.0
+    if len(f) == 0: # if all of the values of f have been accounted for
+        return val
+    elif (f[-1] == "x"):
+        return x
+    elif (f[-1] == "y"):
+        print("here")
+        return y
+    elif (f[-1] == "x2"):
+        return x**2
+    elif (f[-1] == "y2"):
+        return y**2
+    elif (f[-1] == "sin_pi"):
+        print("sin_pi")
+        return math.sin(math.pi*x)
+    elif (f[-1] == "cos_pi"):
+        return math.cos(math.pi*x)
+    else: # if all values have not been checked
+        new = f.pop() # removes the last item from f and assigns that value to n
+        print("new = ", new)
+        # new = new.pop()
+        # print(new)
+        # print(f)
+        val = evaluate_random_function(new, val, y) # evaluate the last value
+        print(val)
     # prod(a, b) = ab
     # avg(a, b) = 0.5*(a + b)
     # cos_pi(a) = cos(pi * a)
     # sin_pi(a) = sin(pi * a)
     # x(a, b) = a
     # y(a, b) = b
+    # x2(a, b) = a**2
+    # y2(a, b) = b**2
 
 
 def remap_interval(val,
@@ -232,8 +273,8 @@ def generate_art(filename, x_size=350, y_size=350):
 if __name__ == '__main__':
     import doctest
     # doctest.testmod()
-    # doctest.run_docstring_examples(get_function, globals())
-    doctest.run_docstring_examples(build_random_function, globals(), verbose = True)
+    doctest.run_docstring_examples(evaluate_random_function, globals(), verbose = True)
+    # doctest.run_docstring_examples(build_random_function, globals(), verbose = True)
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
