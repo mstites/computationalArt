@@ -115,17 +115,20 @@ def evaluate_random_function(f, x, y):
         0.5646348864175506
         >>> evaluate_random_function(['sin_pi', ['cos_pi', ['y']]], 0.75, 0.6)
         -0.8253408053890464
+        >>> evaluate_random_function(["prod", ["x"], ["y"]], 0.1, 0.2)
+        0.020000000000000004
+        >>> evaluate_random_function(["avg", ["x"], ["y"]], 1, -.5)
+        0.25
+        >>> evaluate_random_function(["prod", ["sin_pi", ["x"]], ["cos_pi", ["y"]]], 0.4, 0.8)
+        -0.7694208842938133
+        >>> evaluate_random_function(['prod', ['sin_pi', ['y2']], ['sin_pi', ['y']]], -1, -0.9942857142857143)
+        >>> evaluate_random_function(['sin_pi', ['y']], -1, -0.9942857142857143)
 
-    ['avg', ['cos_pi', ['cos_pi', ['sin_pi', ['x2']]]], ['avg', ['y'], ['sin_pi', ['cos_pi', ['sin_pi', ['sin_pi', ['x2']]]]]]]
-    ['avg', ['cos_pi', ['cos_pi', ['x2']]], ['avg', ['avg', ['y2'], ['cos_pi', ['avg', ['x2'], ['cos_pi', ['x']]]]], ['prod', ['cos_pi', ['x']], ['cos_pi', ['prod', ['cos_pi', ['y2']], ['cos_pi', ['x2']]]]]]]
+        CREATE sOME MORE COMPLEX DOCTESTS WITH NESTED AVG AND PROD
 
     """
-    # if (f[0] == "x"):
-    #     return x
-    # else:
-    #     return y
-    test = f[0]
-    if (test == "x"):
+    test = f[0] # testing the first value in the function
+    if (test == "x"): # if the value is x, etc etc
         return x
     elif (test == "y"):
         return y
@@ -133,41 +136,16 @@ def evaluate_random_function(f, x, y):
         return x**2
     elif (test == "y2"):
         return y**2
-    elif (test == "sin_pi"):
-        return math.sin(math.pi*evaluate_random_function(f.pop(1), x, y))
+    elif (test == "sin_pi"): # if the value is sin_pi
+        return math.sin(math.pi*evaluate_random_function(f.pop(1), x, y)) # find sin(pi*the value within the function). f.pop(1) gives the function the part within sin
     elif (test == "cos_pi"):
-        return math.cos(math.pi*evaluate_random_function(f.pop(1), x, y))
-    return evaluate_random_function(f.pop(1), x, y) # evaluate the last value
-
-    # test = f.pop()
-    # if (test == "x" or test == ["x"]):
-    #     x = x
-    # elif (test == "y" or test == ["y"]):
-    #     y = y
-    # elif (test == "x2" or test == ["x2"]):
-    #     x = x**2
-    # elif (test == "y2" or test == ["y2"]):
-    #     y = y**2
-    # elif (test == "sin_pi" or test == ["sin_pi"]):
-    #     val = math.sin(math.pi*x)
-    # elif (test == "cos_pi" or test == ["cos_pi"]):
-    #     val = math.cos(math.pi*x)
-    # # else: # if all values have not been checked
-    # #     val = x
-    # if len(f) <= 0: # if all of the values of f have been accounted for
-    #     return val
-    # else:
-    #     val = evaluate_random_function(f, val, y) # evaluate the last value
-    # return val
-    # prod(a, b) = ab
-    # avg(a, b) = 0.5*(a + b)
-    # cos_pi(a) = cos(pi * a)
-    # sin_pi(a) = sin(pi * a)
-    # x(a, b) = a
-    # y(a, b) = b
-    # x2(a, b) = a**2
-    # y2(a, b) = b**2
-
+        return math.cos(math.pi*evaluate_random_function(f.pop(1), x, y)) # same as sin but for cos
+    elif (test == "prod"):
+        return evaluate_random_function(f.pop(1), x, y) * evaluate_random_function(f.pop(1), x, y) # the second one is f.pop(1) as well because now the second value is the first value as the first value was kicked out
+    elif (test == "avg"):
+        return (evaluate_random_function(f.pop(1), x, y) + evaluate_random_function(f.pop(1), x, y))/2
+    else: # ????
+        return evaluate_random_function(f.pop(1), x, y)
 
 def remap_interval(val,
                    input_interval_start,
@@ -179,7 +157,7 @@ def remap_interval(val,
     Given an input value in the interval [input_interval_start,
     input_interval_end], return an output value scaled to fall within
     the output interval [output_interval_start, output_interval_end].
-
+)
     Args:
         val: the value to remap
         input_interval_start: the start of the interval that contains all
@@ -224,7 +202,7 @@ def color_map(val):
         >>> color_map(1.0)
         255
         >>> color_map(0.0)
-        127
+        127)
         >>> color_map(0.5)
         191
     """
@@ -265,6 +243,9 @@ def generate_art(filename, x_size=350, y_size=350):
     red_function = build_random_function(7, 9)
     green_function = build_random_function(7, 9)
     blue_function = build_random_function(7, 9)
+    print("red_function = ", red_function)
+    print("green_function = ", green_function)
+    print("blue_function = ", blue_function)
 
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
@@ -274,9 +255,13 @@ def generate_art(filename, x_size=350, y_size=350):
             x = remap_interval(i, 0, x_size, -1, 1)
             y = remap_interval(j, 0, y_size, -1, 1)
             pixels[i, j] = (
-                color_map(evaluate_random_function(red_function, x, y)),
-                color_map(evaluate_random_function(green_function, x, y)),
-                color_map(evaluate_random_function(blue_function, x, y))
+                # color_map(evaluate_random_function(red_function, x, y)),
+                # color_map(evaluate_random_function(green_function, x, y)),
+                # color_map(evaluate_random_function(blue_function, x, y))
+color_map(evaluate_random_function(['cos_pi', ['avg', ['avg', ['sin_pi', ['x2']], ['sin_pi', ['x2']]], ['avg', ['y2'], ['cos_pi', ['sin_pi', ['cos_pi', ['y2']]]]]]], x, y)),
+color_map(evaluate_random_function(['prod', ['y'], ['prod', ['x2'], ['cos_pi', ['cos_pi', ['avg', ['prod', ['x'], ['sin_pi', ['y2']]], ['prod', ['y'], ['cos_pi', ['y2']]]]]]]], x, y)),
+color_map(evaluate_random_function(['prod', ['cos_pi', ['sin_pi', ['avg', ['sin_pi', ['x2']], ['cos_pi', ['cos_pi', ['y2']]]]]], ['cos_pi', ['prod', ['sin_pi', ['avg', ['prod', ['cos_pi', ['x2']], ['sin_pi', ['y']]], ['avg', ['x'], ['sin_pi', ['x']]]]], ['prod', ['sin_pi', ['cos_pi', ['y']]], ['sin_pi', ['sin_pi', ['sin_pi', ['y']]]]]]]], x, y))
+
             )
 
     im.save(filename)
@@ -285,12 +270,12 @@ def generate_art(filename, x_size=350, y_size=350):
 if __name__ == '__main__':
     import doctest
     # doctest.testmod()
-    doctest.run_docstring_examples(evaluate_random_function, globals(), verbose = True)
+    # doctest.run_docstring_examples(evaluate_random_function, globals(), verbose = True)
     # doctest.run_docstring_examples(build_random_function, globals(), verbose = True)
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
-    # generate_art("myart.png")
+    generate_art("myart.png")
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
