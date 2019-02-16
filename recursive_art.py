@@ -112,7 +112,9 @@ def evaluate_random_function(f, x, y):
         >>> evaluate_random_function(['sin_pi', ['y']], 0.5, 0.75)
         0.7071067811865476
         >>> evaluate_random_function(['cos_pi', ['cos_pi', ['y']]], 0.75, 0.6)
-        0.5646348864
+        0.5646348864175506
+        >>> evaluate_random_function(['sin_pi', ['cos_pi', ['y']]], 0.75, 0.6)
+        -0.8253408053890464
 
     ['avg', ['cos_pi', ['cos_pi', ['sin_pi', ['x2']]]], ['avg', ['y'], ['sin_pi', ['cos_pi', ['sin_pi', ['sin_pi', ['x2']]]]]]]
     ['avg', ['cos_pi', ['cos_pi', ['x2']]], ['avg', ['avg', ['y2'], ['cos_pi', ['avg', ['x2'], ['cos_pi', ['x']]]]], ['prod', ['cos_pi', ['x']], ['cos_pi', ['prod', ['cos_pi', ['y2']], ['cos_pi', ['x2']]]]]]]
@@ -122,26 +124,41 @@ def evaluate_random_function(f, x, y):
     #     return x
     # else:
     #     return y
-    test = f.pop()
-    if (test == "x" or test == ["x"]):
-        val = x
-    elif (test == "y" or test == ["y"]):
-        val = y
+    test = f[0]
+    if (test == "x"):
+        return x
+    elif (test == "y"):
+        return y
     elif (test == "x2"):
-        val = x**2
+        return x**2
     elif (test == "y2"):
-        val = y**2
+        return y**2
     elif (test == "sin_pi"):
-        val = math.sin(math.pi*x)
+        return math.sin(math.pi*evaluate_random_function(f.pop(1), x, y))
     elif (test == "cos_pi"):
-        val = math.cos(math.pi*x)
-    else: # if all values have not been checked
-        val = x
-    if len(f) <= 0: # if all of the values of f have been accounted for
-        return val
-    else:
-        val = evaluate_random_function(f, val, y) # evaluate the last value
-    return val
+        return math.cos(math.pi*evaluate_random_function(f.pop(1), x, y))
+    return evaluate_random_function(f.pop(1), x, y) # evaluate the last value
+
+    # test = f.pop()
+    # if (test == "x" or test == ["x"]):
+    #     x = x
+    # elif (test == "y" or test == ["y"]):
+    #     y = y
+    # elif (test == "x2" or test == ["x2"]):
+    #     x = x**2
+    # elif (test == "y2" or test == ["y2"]):
+    #     y = y**2
+    # elif (test == "sin_pi" or test == ["sin_pi"]):
+    #     val = math.sin(math.pi*x)
+    # elif (test == "cos_pi" or test == ["cos_pi"]):
+    #     val = math.cos(math.pi*x)
+    # # else: # if all values have not been checked
+    # #     val = x
+    # if len(f) <= 0: # if all of the values of f have been accounted for
+    #     return val
+    # else:
+    #     val = evaluate_random_function(f, val, y) # evaluate the last value
+    # return val
     # prod(a, b) = ab
     # avg(a, b) = 0.5*(a + b)
     # cos_pi(a) = cos(pi * a)
