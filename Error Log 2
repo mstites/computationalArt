@@ -1,0 +1,13 @@
+[Command: python -u '/home/griffith/Documents/Github/Software Design/ComputationalArt-Griffith-Stites/recursive_art.py']
+('red_function = ', ['cos_pi', ['avg', ['avg', ['sin_pi', ['x2']], ['sin_pi', ['x2']]], ['avg', ['y2'], ['cos_pi', ['sin_pi', ['cos_pi', ['y2']]]]]]])
+('green_function = ', ['prod', ['y'], ['prod', ['x2'], ['cos_pi', ['cos_pi', ['avg', ['prod', ['x'], ['sin_pi', ['y2']]], ['prod', ['y'], ['cos_pi', ['y2']]]]]]]])
+('blue_function = ', ['prod', ['cos_pi', ['sin_pi', ['avg', ['sin_pi', ['x2']], ['cos_pi', ['cos_pi', ['y2']]]]]], ['cos_pi', ['prod', ['sin_pi', ['avg', ['prod', ['cos_pi', ['x2']], ['sin_pi', ['y']]], ['avg', ['x'], ['sin_pi', ['x']]]]], ['prod', ['sin_pi', ['cos_pi', ['y']]], ['sin_pi', ['sin_pi', ['sin_pi', ['y']]]]]]]])
+Traceback (most recent call last):
+  File "/home/griffith/Documents/Github/Software Design/ComputationalArt-Griffith-Stites/recursive_art.py", line 278, in <module>
+    generate_art("myart.png")
+  File "/home/griffith/Documents/Github/Software Design/ComputationalArt-Griffith-Stites/recursive_art.py", line 258, in generate_art
+    color_map(evaluate_random_function(red_function, x, y)),
+  File "/home/griffith/Documents/Github/Software Design/ComputationalArt-Griffith-Stites/recursive_art.py", line 142, in evaluate_random_function
+    return math.cos(math.pi*evaluate_random_function(f.pop(1), x, y)) # same as sin but for cos
+IndexError: pop index out of range
+[Finished in 0.16s]
