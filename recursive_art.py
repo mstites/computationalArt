@@ -123,11 +123,7 @@ def evaluate_random_function(f, x, y):
         -0.7694208842938133
         >>> evaluate_random_function(['prod', ['sin_pi', ['y2']], ['sin_pi', ['y']]], -1, -0.9942857142857143)
         >>> evaluate_random_function(['sin_pi', ['y']], -1, -0.9942857142857143)
-
-        CREATE sOME MORE COMPLEX DOCTESTS WITH NESTED AVG AND PROD
-
     """
-    print(f)
     test = f[0] # testing the first value in the function
     if (test == "x"): # if the value is x, etc etc
         return x
@@ -138,15 +134,15 @@ def evaluate_random_function(f, x, y):
     elif (test == "y2"):
         return y**2
     elif (test == "sin_pi"): # if the value is sin_pi
-        return math.sin(math.pi*evaluate_random_function(f.pop(1), x, y)) # find sin(pi*the value within the function). f.pop(1) gives the function the part within sin
+        return math.sin(math.pi*evaluate_random_function(f[1], x, y)) # find sin(pi*the value within the function). f[] gives the function the part within sin
     elif (test == "cos_pi"):
-        return math.cos(math.pi*evaluate_random_function(f.pop(1), x, y)) # same as sin but for cos
+        return math.cos(math.pi*evaluate_random_function(f[1], x, y)) # same as sin but for cos
     elif (test == "prod"):
-        return evaluate_random_function(f.pop(1), x, y) * evaluate_random_function(f.pop(1), x, y) # the second one is f.pop(1) as well because now the second value is the first value as the first value was kicked out
+        return evaluate_random_function(f[1], x, y) * evaluate_random_function(f[2], x, y) # find the two values for the prod. f[1] analyzes the first val, f[2] analyzes the second
     elif (test == "avg"):
-        return (evaluate_random_function(f.pop(1), x, y) + evaluate_random_function(f.pop(1), x, y))/2
-    else: # ????
-        return evaluate_random_function(f.pop(1), x, y)
+        return (evaluate_random_function(f[1], x, y) + evaluate_random_function(f[2], x, y))/2 # find the two values for the avg. f[1] analyzes the first val, f[2] analyzes the second
+    else:
+        return evaluate_random_function(f[1], x, y) # else, evaluate the next value
 
 def remap_interval(val,
                    input_interval_start,
@@ -241,12 +237,9 @@ def generate_art(filename, x_size=350, y_size=350):
         x_size, y_size: optional args to set image dimensions (default: 350)
     """
     # Functions for red, green, and blue channels - where the magic happens!
-    # red_function = build_random_function(7, 9)
-    # green_function = build_random_function(7, 9)
-    # blue_function = build_random_function(7, 9)
-    red_function = ['sin_pi', ['avg', ['avg', ['sin_pi', ['x2']], ['sin_pi', ['x2']]], ['avg', ['y2'], ['sin_pi', ['sin_pi', ['sin_pi', ['y2']]]]]]]
-    green_function = ['prod', ['y'], ['prod', ['x2'], ['sin_pi', ['sin_pi', ['avg', ['prod', ['x'], ['sin_pi', ['y2']]], ['prod', ['y'], ['sin_pi', ['y2']]]]]]]]
-    blue_function = ['prod', ['sin_pi', ['sin_pi', ['avg', ['sin_pi', ['x2']], ['sin_pi', ['sin_pi', ['y2']]]]]], ['sin_pi', ['prod', ['sin_pi', ['avg', ['prod', ['sin_pi', ['x2']], ['sin_pi', ['y']]], ['avg', ['x'], ['sin_pi', ['x']]]]], ['prod', ['sin_pi', ['sin_pi', ['y']]], ['sin_pi', ['sin_pi', ['sin_pi', ['y']]]]]]]]
+    red_function = build_random_function(7, 9)
+    green_function = build_random_function(7, 9)
+    blue_function = build_random_function(7, 9)
     print("red_function = ", red_function)
     print("green_function = ", green_function)
     print("blue_function = ", blue_function)
@@ -258,17 +251,10 @@ def generate_art(filename, x_size=350, y_size=350):
         for j in range(y_size): # loops over all the y pixels (columns) in that row
             x = remap_interval(i, 0, x_size, -1, 1)
             y = remap_interval(j, 0, y_size, -1, 1)
-            print("x = ", x, "y = ", y)
             pixels[i, j] = (
                 color_map(evaluate_random_function(red_function, x, y)),
                 color_map(evaluate_random_function(green_function, x, y)),
                 color_map(evaluate_random_function(blue_function, x, y))
-                # color_map(evaluate_random_function(['cos_pi', ['avg', ['avg', ['sin_pi', ['x2']], ['sin_pi', ['x2']]], ['avg', ['y2'], ['cos_pi', ['sin_pi', ['cos_pi', ['y2']]]]]]], x, y)),
-                # color_map(evaluate_random_function(['prod', ['y'], ['prod', ['x2'], ['cos_pi', ['cos_pi', ['avg', ['prod', ['x'], ['sin_pi', ['y2']]], ['prod', ['y'], ['cos_pi', ['y2']]]]]]]], x, y)),
-                # color_map(evaluate_random_function(['prod', ['cos_pi', ['sin_pi', ['avg', ['sin_pi', ['x2']], ['cos_pi', ['cos_pi', ['y2']]]]]], ['cos_pi', ['prod', ['sin_pi', ['avg', ['prod', ['cos_pi', ['x2']], ['sin_pi', ['y']]], ['avg', ['x'], ['sin_pi', ['x']]]]], ['prod', ['sin_pi', ['cos_pi', ['y']]], ['sin_pi', ['sin_pi', ['sin_pi', ['y']]]]]]]], x, y))
-                # color_map(evaluate_random_function(['y'], x, y)),
-                # color_map(evaluate_random_function(['sin_pi', ['y']], x, y)),
-                # color_map(evaluate_random_function(['prod', ['sin_pi', ['y2']], ['sin_pi', ['y']]], x, y))
             )
 
     im.save(filename)
