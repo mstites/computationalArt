@@ -57,9 +57,9 @@ def build_random_function(min_depth, max_depth):
         (See the assignment writ-eup for details on the representation of
         these functions)
 
-    >>> build_random_function(1, 3)
-    >>> build_random_function(3, 3)
-    >>> build_random_function(7, 9)
+    # >>> build_random_function(1, 3)
+    # >>> build_random_function(3, 3)
+    # >>> build_random_function(7, 9)
     """
     list = []
 
@@ -121,8 +121,6 @@ def evaluate_random_function(f, x, y):
         0.25
         >>> evaluate_random_function(["prod", ["sin_pi", ["x"]], ["cos_pi", ["y"]]], 0.4, 0.8)
         -0.7694208842938133
-        >>> evaluate_random_function(['prod', ['sin_pi', ['y2']], ['sin_pi', ['y']]], -1, -0.9942857142857143)
-        >>> evaluate_random_function(['sin_pi', ['y']], -1, -0.9942857142857143)
     """
     test = f[0] # testing the first value in the function
     if (test == "x"): # if the value is x, etc etc
@@ -199,7 +197,7 @@ def color_map(val):
         >>> color_map(1.0)
         255
         >>> color_map(0.0)
-        127)
+        127
         >>> color_map(0.5)
         191
     """
@@ -240,9 +238,6 @@ def generate_art(filename, x_size=350, y_size=350):
     red_function = build_random_function(7, 9)
     green_function = build_random_function(7, 9)
     blue_function = build_random_function(7, 9)
-    print("red_function = ", red_function)
-    print("green_function = ", green_function)
-    print("blue_function = ", blue_function)
 
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
@@ -259,17 +254,21 @@ def generate_art(filename, x_size=350, y_size=350):
 
     im.save(filename)
 
+def generate_multiple_pieces(num, x_size=350, y_size=350):
+    """Generate multiple art pieces at once.
+
+    num = number of pieces to generate
+    x_size, y_size: optional args to set image dimensions
+    """
+    if(num == 0):
+        return
+    else:
+        filename = "art" + str(num) + ".png"
+        generate_art(filename, x_size, y_size)
+        generate_multiple_pieces(num-1, x_size, y_size)
 
 if __name__ == '__main__':
     import doctest
-    # doctest.testmod()
-    # doctest.run_docstring_examples(evaluate_random_function, globals(), verbose = True)
-    # doctest.run_docstring_examples(build_random_function, globals(), verbose = True)
-    # Create some computational art!
-    # TODO: Un-comment the generate_art function call after you
-    #       implement remap_interval and evaluate_random_function
-    generate_art("myart.png")
-
-    # Test that PIL is installed correctly
-    # TODO: Comment or remove this function call after testing PIL install
-    # test_image("noise.png")
+    doctest.testmod()
+    # generate_art("myart.png")
+    generate_multiple_pieces(2)
