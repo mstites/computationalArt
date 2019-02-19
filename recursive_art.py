@@ -271,4 +271,4 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
     # generate_art("myart.png")
-    generate_multiple_pieces(12)
+    generate_multiple_pieces(3, 3840, 2160)
