@@ -13,6 +13,8 @@ def get_function(start = 1, end = 6):
 
     Uses a dictionary as a switch to chose a random function to return.
 
+    The following doctest were added to make sure each item in the dictionary
+    could be accessed and the dictionary is working correctly.
     >>> get_function(1, 1)
     'prod'
     >>> get_function(2, 2)
@@ -57,8 +59,17 @@ def build_random_function(min_depth, max_depth):
         (See the assignment writ-eup for details on the representation of
         these functions)
 
+    I added these doctests to test to make sure the function created random
+    functions with the correct items nested.
+
+    This doctest was added to make sure that any length within min_depth and
+    max_depth can be created (since it is short)
     # >>> build_random_function(1, 3)
+    This doctest was added for testing to make sure the random functions with
+    avg or prod had teh correct functions nested.
     # >>> build_random_function(3, 3)
+    This doctest was added to make sure the correct length for this program can
+    be generated.
     # >>> build_random_function(7, 9)
     """
     list = []
@@ -109,16 +120,29 @@ def evaluate_random_function(f, x, y):
         -0.5
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
+
+        The following doctest was added to make sure sin_pi works
         >>> evaluate_random_function(['sin_pi', ['y']], 0.5, 0.75)
         0.7071067811865476
+
+        The following doctest was added to test nested cos_pi functions
         >>> evaluate_random_function(['cos_pi', ['cos_pi', ['y']]], 0.75, 0.6)
         0.5646348864175506
+
+        The following doctest was added to check if the nested functions were
+        different.
         >>> evaluate_random_function(['sin_pi', ['cos_pi', ['y']]], 0.75, 0.6)
         -0.8253408053890464
+
+        The following doctest was added to check prod.
         >>> evaluate_random_function(["prod", ["x"], ["y"]], 0.1, 0.2)
         0.020000000000000004
+
+        The following doctest was added to test avg.
         >>> evaluate_random_function(["avg", ["x"], ["y"]], 1, -.5)
         0.25
+
+        The following doctest was added to test prod with nested values.
         >>> evaluate_random_function(["prod", ["sin_pi", ["x"]], ["cos_pi", ["y"]]], 0.4, 0.8)
         -0.7694208842938133
     """
@@ -172,6 +196,8 @@ def remap_interval(val,
         5.0
         >>> remap_interval(5, 4, 6, 0, 2) # 5 is half way in between 4 and 6, 1.0 is between 0 and 2
         1.0
+
+        The following doctest was added to test not starting at 0 for the output interval
         >>> remap_interval(5, 4, 6, 1, 2)
         1.5
     """
